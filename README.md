@@ -1,80 +1,46 @@
-# Steps
 
-1. Clear old SSH fingerprints on the host
+1. Generate a new SSH key
 
 ```sh
-ssh-keygen -R '[localhost]:22022'
+ssh-keygen -t ed25519 -C "steliyan@localhost" -f $HOME/.ssh/id_localhost
 ```
 
-> Only if you've already used the existing port/host.
+2. Update the SSH configuration
 
-2. Create a new virtual machine in **UTM**
+File: `~/.ssh/config`
 
-- CPU: `Default`
-- Memory: `16GB` (the `tmpfs` is 50%, so you need more space, otherwise `disko` setup fails)
-- Network: `Emulated VLAN`
-  - Add a port mapping `22` to `22022`
-  - Set password for the `nixos` user by using:
+Contents:
 
-For some reason, SSH can't be used with **Bridged** networking, although `nc` successfully connects using `nc -z <IP_ADDRESS>`.
+```text
+Host localhost
+    IdentityFile ~/.ssh/id_localhost
+```
+
+3. Set passworf for the `nixos` user for the NixOS installer
 
 ```sh
 passwd
 ```
 
-3. Test SSH connectivity
+4. Install
 
 ```sh
-ssh nixos@localhost -p 22022
+ssh-keygen -R '[localhost]:22023' && ssh nixos@localhost -p 22023 -o StrictHostKeyChecking=accept-new
 ```
-
-4. Disko
-
-4.1. Disk configuration
 
 ```sh
-curl https://raw.githubusercontent.com/nix-community/disko/master/example/hybrid.nix -o /tmp/disko-config.nix
+cd /tmp && \
+git clone https://github.com/steliyan/nix-utm.git && \
+cd nix-utm && \
+nix run --experimental-features "nix-command flakes" github:nix-community/nixos-anywhere -- --flake '.#utm' --target-host nixos@localhost
 ```
 
-4.2. Update the disk name
-If running in a VM, use `/dev/vda`. Or use `lsblk` to find out the disk name.
+5. Post-install
 
-4.3. ⚠️ Format disk
+  5.1. Reset `steliyan` password: `passwd`
+  5.2. Reset `root` password: `sudo passwd root`
+  5.3. Connect to VM
 
 ```sh
-sudo nix --experimental-features "nix-command flakes" run github:nix-community/disko/latest -- --mode destroy,format,mount /tmp/disko-config.nix
+ssh-keygen -R '[localhost]:22023' && ssh steliyan@localhost -p 22023 -o StrictHostKeyChecking=accept-new
 ```
-
-4.4. Verify
-
-```sh
-mount | grep /mnt # OR lsblk
-```
-
-5. Install
-
-5.1. Clone repo
-
-```sh
-sudo mkdir -p /mnt/etc/nixos
-cd /mnt/etc/nixos
-sudo git clone https://github.com/steliyan/nix-utm .
-```
-
-5.2. Install NixOS
-
-```sh
-sudo nixos-install --root /mnt --flake '/mnt/etc/nixos#nixos'
-sudo reboot
-```
-
-5.3. Eject NixOS ISO
-
-6. Post-install
-
-- Enable flakes - TODO
-
-## References
-
-- <https://github.com/nix-community/disko/blob/master/docs/quickstart.md>
-- <https://nixos.asia/en/nixos-install-disko>
