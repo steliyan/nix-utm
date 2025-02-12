@@ -23,7 +23,7 @@
   boot.loader.grub.efiSupport = true;
   boot.loader.grub.efiInstallAsRemovable = true;
 
-  # networking.hostName = "nixos"; # Define your hostname.
+  networking.hostName = "utm"; # Define your hostname.
   # Pick only one of the below networking options.
   # networking.wireless.enable = true;  # Enables wireless support via wpa_supplicant.
   # networking.networkmanager.enable = true;  # Easiest to use and most distros use this by default.
@@ -72,6 +72,15 @@
   #     tree
   #   ];
   # };
+
+  users.users.steliyan = {
+    isNormalUser = true;
+    extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
+    home = "/home/steliyan";
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMaGcVzvf8Lex1cFYhFK4cAUm2ECWsCmgS0/fVNNHj/"
+    ];
+  };
 
   # programs.firefox.enable = true;
 

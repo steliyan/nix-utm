@@ -12,7 +12,7 @@
     inputs@{ self, nixpkgs, ... }:
     {
       # NOTE: 'nixos' is the default hostname set by the installer
-      nixosConfigurations.nixos = nixpkgs.lib.nixosSystem {
+      nixosConfigurations.utm = nixpkgs.lib.nixosSystem {
         # NOTE: Change this to aarch64-linux if you are on ARM
         system = "aarch64-linux";
         modules = [
