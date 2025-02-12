@@ -73,10 +73,15 @@
   #   ];
   # };
 
+  users.users.root = {
+    initialHashedPassword = "";
+  };
+
   users.users.steliyan = {
     isNormalUser = true;
     extraGroups = [ "wheel" ]; # Enable ‘sudo’ for the user.
     home = "/home/steliyan";
+    initialHashedPassword = "";
     openssh.authorizedKeys.keys = [
       "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMaGcVzvf8Lex1cFYhFK4cAUm2ECWsCmgS0/fVNNHj/"
     ];
@@ -102,10 +107,17 @@
   # List services that you want to enable:
 
   # Enable the OpenSSH daemon.
-  services.openssh.enable = true;
+  services.openssh = {
+    enable = true;
+    settings.PasswordAuthentication = false;
+    settings.KbdInteractiveAuthentication = false;
+  };
 
   # Open ports in the firewall.
-  networking.firewall.allowedTCPPorts = [ 22 ];
+  networking.firewall = {
+    enable = true;
+    allowedTCPPorts = [ 22 ];
+  };
   # networking.firewall.allowedUDPPorts = [ ... ];
   # Or disable the firewall altogether.
   # networking.firewall.enable = false;
