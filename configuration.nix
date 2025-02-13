@@ -92,7 +92,7 @@
 
   age = {
     secrets = {
-      tailscale.file = ./secrets/secret1.age
+      tailscale.file = ./secrets/secret1.age;
     };
   };
 
