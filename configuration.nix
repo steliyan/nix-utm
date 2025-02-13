@@ -75,6 +75,9 @@
 
   users.users.root = {
     initialHashedPassword = "";
+    openssh.authorizedKeys.keys = [
+      "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIDMaGcVzvf8Lex1cFYhFK4cAUm2ECWsCmgS0/fVNNHj/"
+    ];
   };
 
   users.users.steliyan = {
