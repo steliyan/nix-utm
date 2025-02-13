@@ -90,6 +90,12 @@
     ];
   };
 
+  age = {
+    secrets = {
+      tailscale.file = ./secrets/secret1.age
+    };
+  };
+
   # programs.firefox.enable = true;
 
   # List packages installed in system profile. To search, run:
@@ -123,7 +129,6 @@
       enable = false;
     };
   };
-
 
   # Open ports in the firewall.
   networking.firewall = {

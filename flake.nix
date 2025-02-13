@@ -7,9 +7,11 @@
     nixpkgs.url = "github:NixOS/nixpkgs/nixos-24.11";
     disko.url = "github:nix-community/disko";
     disko.inputs.nixpkgs.follows = "nixpkgs";
+    agenix.url = "github:ryantm/agenix";
+
   };
   outputs =
-    inputs@{ self, nixpkgs, ... }:
+    inputs@{ self, nixpkgs, agenix, ... }:
     {
       # NOTE: 'nixos' is the default hostname set by the installer
       nixosConfigurations.utm = nixpkgs.lib.nixosSystem {
@@ -18,6 +20,10 @@
         modules = [
           ./configuration.nix
           inputs.disko.nixosModules.disko
+          agenix.nixosModules.default
+          {
+            environment.systemPackages = [ agenix.packages.aarch64-linux.default ];
+          }
         ];
       };
     };
