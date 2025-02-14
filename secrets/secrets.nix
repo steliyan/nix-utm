@@ -3,4 +3,5 @@ let
 in
 {
   "secret1.age".publicKeys = [ k ];
+  "tailscale.age".publicKeys = [ k ];
 }
