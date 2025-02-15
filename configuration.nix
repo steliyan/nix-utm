@@ -91,12 +91,6 @@
     ];
   };
 
-  age = {
-    secrets = {
-      secret1.file = ./secrets/secret1.age;
-    };
-  };
-
   # programs.firefox.enable = true;
 
   # List packages installed in system profile. To search, run:
